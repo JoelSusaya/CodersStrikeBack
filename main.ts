@@ -1,4 +1,4 @@
-function getThrustByAngle(angle: number) {
+function getThrustByAngle(angle: number): number {
     if (angle > 135) {
         return 0;
     }
@@ -28,9 +28,9 @@ function getThrustByAngle(angle: number) {
     }
 
     return 100;
-};
+}
 
-function changeThrustByDistance(thrust: number, distance:number) {
+function changeThrustByDistance(thrust: number, distance: number): number {
     if (distance < 100) {
         return thrust * .2;
     }
@@ -44,271 +44,320 @@ function changeThrustByDistance(thrust: number, distance:number) {
         return thrust * .9;
     }
     return thrust;
-};
+}
+
+class CodingGame {
+  print(output: any): void {
+    let expression: string = "print('" + output + "');";
+    eval(expression);
+  }
+
+  printErr(output: any): void {
+    let expression: string =  "printErr('" + output + "');";
+    eval(expression);
+  }
+
+  readline(): string {
+    return eval("readline();");
+  }
+}
 
 // Target class for aiming the player pod
 class Target {
-    // Getter methods for getting the x and y values for a target
-    get x() {
-        return this._x;
-    }
-    set x(position) {
-        this._x = position;
-    }
+  private _x: number;
+  private _y: number;
 
-    get y() {
-        return this._y;
-    }
-    set y(position) {
-        this._y = position;
-    }
+  // Getter methods for getting the x and y values for a target
+  get x(): number {
+    return this._x;
+  }
+  set x(position: number) {
+    this._x = position;
+  }
+
+  get y(): number {
+    return this._y;
+  }
+  set y(position: number) {
+    this._y = position;
+  }
 }
 
 class Checkpoint extends Target {
-    constructor() {
-        super();
-        this._RADIUS = 600;
-    }
+  private _RADIUS: number;
+  private _distanceFromPlayer: number;
 
-    outerPointByDegree(degree) {
+  constructor() {
+    super();
+    this._RADIUS = 600;
+  }
 
-    }
+  outerPointByDegree(degree: number): void {
+    return;
+  }
 
-    get distance() {
-        return this._distanceFromPlayer;
-    }
+  get distance(): number {
+    return this._distanceFromPlayer;
+  }
 
-    set distance(distance) {
-        this._distanceFromplayer = distance;
-    }
+  set distance(distance: number) {
+    this._distanceFromPlayer = distance;
+  }
 
 }
 
 class RaceCourse {
-    constructor() {
-        this._course = [];
-        this._courseLearned = false;
-    }
+  private _course: Array<Checkpoint>;
+  private _courseLearned: boolean;
+  private _nextCheckpoint: Checkpoint;
 
-    checkpointExists(newCheckpoint) {
-        for (let checkpoint of this._course) {
-            if (checkpoint.x === newCheckpoint.x && checkpoint.y === newCheckpoint.y) {
-                return true;
-            }
-        }
-        return false;
-    }
+  constructor() {
+    this._course = [];
+    this._courseLearned = false;
+  }
 
-    addCheckpoint(newCheckpoint) {
-        this._course.push(newCheckpoint);
-        this._nextCheckpoint = newCheckpoint;
+  checkpointExists(newCheckpoint: Checkpoint): boolean {
+    for (let checkpoint of this._course) {
+      if (checkpoint.x === newCheckpoint.x && checkpoint.y === newCheckpoint.y) {
+        return true;
+      }
     }
+    return false;
+  }
 
-    getCheckpoint(index) {
-        this._course[index];
-    }
+  addCheckpoint(newCheckpoint: Checkpoint): void {
+    this._course.push(newCheckpoint);
+    this._nextCheckpoint = newCheckpoint;
+  }
 
-    get courseLength() {
-        return this._course.length;
-    }
+  getCheckpoint(index: number): Checkpoint {
+    return this._course[index];
+  }
 
-    get nextCheckpoint() {
-        return this._nextCheckpoint;
-    }
-    set nextCheckpoint(checkpoint) {
-        this._nextCheckpoint = checkpoint;
-    }
+  get courseLength(): number {
+    return this._course.length;
+  }
 
-    get courseLearned() {
-        return this._courseLearned;
-    }
+  get nextCheckpoint(): Checkpoint {
+    return this._nextCheckpoint;
+  }
+  set nextCheckpoint(checkpoint: Checkpoint) {
+    this._nextCheckpoint = checkpoint;
+  }
 
-    learnCourse(checkpoint) {
-        if (!this.checkpointExists(checkpoint)) {
-            this.addCheckpoint(checkpoint);
-        }
-        else if (this.nextCheckpoint.x !== checkpoint.x && this.nextCheckpoint.y !== checkpoint.y) {
-            this._courseLearned = true;
-        }
-    }
+  get courseLearned(): boolean {
+    return this._courseLearned;
+  }
 
-    // TODO Track laps
+  learnCourse(checkpoint: Checkpoint): void {
+    if (!this.checkpointExists(checkpoint)) {
+      this.addCheckpoint(checkpoint);
+    }
+    else if (this.nextCheckpoint.x !== checkpoint.x && this.nextCheckpoint.y !== checkpoint.y) {
+      this._courseLearned = true;
+    }
+  }
+
+  // TODO Track laps
 
 }
 
 class Pod {
+  private _x: number;
+  private _lastX: number;
+  private _y: number;
+  private _lastY: number;
+  private _xVelocity: number;
+  private _lastXVelocity: number;
+  private _yVelocity: number;
+  private _lastYVelocity: number;
+  private _xAccel: number;
+  private _yAccel: number;
+
     // Position getters and setters
-    get x() {
-        return this._x;
-    }
-    set x(position) {
-        this._lastX = this._x;
-        this._x = position;
-    }
+  get x(): number {
+    return this._x;
+  }
+  set x(position: number) {
+    this._lastX = this._x;
+    this._x = position;
+  }
 
-    get y() {
-        return this._y;
-    }
-    set y(position) {
-        this._lastY = this._y;
-        this._y = position;
-    }
+  get y(): number {
+    return this._y;
+  }
+  set y(position: number) {
+    this._lastY = this._y;
+    this._y = position;
+  }
 
-    // Methods for calculating the change in X and Y
-    get xVelocity() {
-        if(typeof this._lastX === "undefined") {
-            return undefined;
-        }
-
-        this._lastXVelocity = this._xVelocity;
-        this._xVelocity = this._x - this._lastX;
-        return this._xVelocity;
+  // Methods for calculating the change in X and Y
+  get xVelocity(): number {
+    if (typeof(this._lastX) === "undefined") {
+        return undefined;
     }
 
-    get yVelocity() {
-        if(typeof this._lastY === "undefined") {
-            return undefined;
-        }
+    this._lastXVelocity = this._xVelocity;
+    this._xVelocity = this._x - this._lastX;
+    return this._xVelocity;
+  }
 
-
-        this._lastYVelocity = this._yVelocity;
-        this._yVelocity = this._y - this._lastY;
-        return this._yVelocity;
+  get yVelocity(): number {
+    if (typeof this._lastY === "undefined") {
+        return undefined;
     }
 
-    get velocity() {
-        let addedSquaredVelocity = this.xVelocity^2 + this.yVelocity^2;
-        /*
-        if (addedSquaredVelocity < 0) {
-            return Math.sqrt(Math.abs(addedSquaredVelocity)) * -1;
-        }
-        */
-        return Math.sqrt(Math.abs(addedSquaredVelocity));
+
+    this._lastYVelocity = this._yVelocity;
+    this._yVelocity = this._y - this._lastY;
+    return this._yVelocity;
+  }
+
+  get velocity(): number {
+    let addedSquaredVelocity = (this.xVelocity ^ 2) + (this.yVelocity ^ 2);
+    /*
+    if (addedSquaredVelocity < 0) {
+        return Math.sqrt(Math.abs(addedSquaredVelocity)) * -1;
+    }
+    */
+    return Math.sqrt(Math.abs(addedSquaredVelocity));
+  }
+
+  get xAccel(): number  {
+    if (typeof this._lastXVelocity === "undefined") {
+        return undefined;
     }
 
-    get xAccel() {
-        if(typeof this._lastXVelocity === "undefined") {
-            return undefined;
-        }
+    this._xAccel = this._xVelocity - this._lastXVelocity;
+    return this._xAccel;
+  }
 
-        this._xAccel = this._xVelocity - this._lastXVelocity;
-        return this._xAccel;
+  get yAccel(): number  {
+    if (typeof this._lastYVelocity === "undefined") {
+        return undefined;
     }
 
-    get yAccel() {
-        if(typeof this._lastYVelocity === "undefined") {
-            return undefined;
-        }
+    this._yAccel = this._yVelocity - this._lastYVelocity;
+    return this._yAccel;
+  }
 
-        this._yAccel = this._yVelocity - this._lastYVelocity;
-        return this._yAccel;
+  get acceleration(): number  {
+    let addedSquaredAccel = (this.xAccel ^ 2) + (this.yAccel ^ 2);
+
+    /*
+    if (addedSquaredAccel < 0) {
+        return Math.sqrt(Math.abs(addedSquaredAccel)) * -1;
     }
+    */
 
-    get acceleration() {
-        let addedSquaredAccel = this.xAccel^2 + this.yAccel^2;
-
-        /*
-        if (addedSquaredAccel < 0) {
-            return Math.sqrt(Math.abs(addedSquaredAccel)) * -1;
-        }
-        */
-
-        return Math.sqrt(Math.abs(addedSquaredAccel));
-    }
+    return Math.sqrt(Math.abs(addedSquaredAccel));
+  }
 }
 
 class PlayerPod extends Pod {
+  private readonly _MINTHRUST: number;
+  private readonly _MAXTHRUST: number;
+  private _hasBoost: boolean;
+  private _angle: number;
+  private _target: Target;
+  private _targetCheckpoint: Checkpoint;
 
-    constructor() {
-        super();
-        this._MINTHRUST = 0;
-        this._MAXTHRUST = 100;
-        this._hasBoost = true;
-    }
+  constructor() {
+      super();
+      this._MINTHRUST = 0;
+      this._MAXTHRUST = 100;
+      this._hasBoost = true;
+  }
 
-    get MINTHRUST() {
-        return this._MINTHRUST;
-    }
+  get minThrust(): number {
+      return this._MINTHRUST;
+  }
 
-    get MAXTHRUST() {
-        return this._MAXTHRUST;
-    }
+  get maxThrust(): number {
+      return this._MAXTHRUST;
+  }
 
-    get angle() {
-        return this._angle;
-    }
+  get angle(): number {
+      return this._angle;
+  }
 
-    set angle(newAngle) {
-        this._angle = newAngle;
-    }
+  set angle(newAngle: number) {
+      this._angle = newAngle;
+  }
 
-    get thrust() {
+  get thrust(): void {
+    return;
+  }
 
-    }
+  get targetCheckpoint(): Checkpoint {
+      return this._targetCheckpoint;
+  }
 
-    get targetCheckpoint() {
-        return player._targetCheckpoint;
-    }
+  set targetCheckpoint(checkpoint: Checkpoint) {
+      this._targetCheckpoint = checkpoint;
+  }
 
-    set targetCheckpoint(checkpoint) {
-        player._targetCheckpoint = checkpoint;
-    }
-
-    get target() {
-        return player._target;
-    }
-    set target(target) {
-        player._target = target;
-    }
+  get target(): Target {
+      return this._target;
+  }
+  set target(target: Target) {
+      this._target = target;
+  }
 
 }
 
-var player = new PlayerPod();
-var opponent = new Pod();
+let player = new PlayerPod();
+let opponent = new Pod();
 
-var race = new RaceCourse();
+let race = new RaceCourse();
+
+let codingGame = new CodingGame();
 
 // game loop
 while (true) {
-    var inputs = readline().split(' ');
+  let inputs: Array<string>;
 
-    // Update player info
-    player.x = parseInt(inputs[0]);
-    player.y = parseInt(inputs[1]);
+  inputs = codingGame.readline().split(" ");
 
-    //Set up checkpoint based on latest data
-    var nextCheckpoint = new Checkpoint();
-    nextCheckpoint.x = parseInt(inputs[2]); // x position of the next check point
-    nextCheckpoint.y = parseInt(inputs[3]); // y position of the next check point
-    nextCheckpoint.distance = parseInt(inputs[4]); // distance to the next checkpoint
-    player.angle = parseInt(inputs[5]); // angle between your pod orientation and the direction of the next checkpoint
+  // Update player info
+  player.x = parseInt(inputs[0], 10);
+  player.y = parseInt(inputs[1], 10);
 
-    //Update opponent info
-    var inputs = readline().split(' ');
-    opponent.x = parseInt(inputs[0]);
-    opponent.y = parseInt(inputs[1]);
+  // Set up checkpoint based on latest data
+  let nextCheckpoint = new Checkpoint();
+  nextCheckpoint.x = parseInt(inputs[2], 10); // x position of the next check point
+  nextCheckpoint.y = parseInt(inputs[3], 10); // y position of the next check point
+  nextCheckpoint.distance = parseInt(inputs[4], 10); // distance to the next checkpoint
+  player.angle = parseInt(inputs[5], 10); // angle between your pod orientation and the direction of the next checkpoint
 
-   // Each turn check to see if the next Checkpoint is already known to our race object
-   // Once we've gotten all of the checkpoints, we set the
-   if (race.courseLearned === false) race.learnCourse(nextCheckpoint);
+  // Update opponent info
+  inputs = codingGame.readline().split(" ");
+  opponent.x = parseInt(inputs[0], 10);
+  opponent.y = parseInt(inputs[1], 10);
 
-    // TODO: Encapsulate thrust in the PlayerPod class so that boosting decisions are all carried out through player.thrust
-    var thrust;
-    if (nextCheckpoint.distance > 4000 && player.angle === 0) {
-        thrust = "BOOST";
-    }
-    else {
-        thrust = getThrustByAngle(Math.abs(player.angle));
-        thrust = changeThrustByDistance(thrust, nextCheckpoint.distance);
-    }
+ // Each turn check to see if the next Checkpoint is already known to our race object
+ // Once we"ve gotten all of the checkpoints, we set the
+ if (race.courseLearned === false) {
+  race.learnCourse(nextCheckpoint);
+}
 
-    // Print output for checking object contents
-    printErr("All Checkpoints Known: " + race.allCheckpointsKnown);
-    printErr("Course Length: " + race.courseLength);
-    printErr("Player Velocity: " + player.velocity);
-    printErr("Player Acceleration: " + player.acceleration);
-    printErr("Opponent Velocity: " + opponent.velocity);
-    printErr("Opponent Acceleration: " + opponent.acceleration);
+  // TODO: Encapsulate thrust in the PlayerPod class so that boosting decisions are all carried out through player.thrust
+  let thrust;
+  if (nextCheckpoint.distance > 4000 && player.angle === 0) {
+      thrust = "BOOST";
+  }
+  else {
+      thrust = getThrustByAngle(Math.abs(player.angle));
+      thrust = changeThrustByDistance(thrust, nextCheckpoint.distance);
+  }
 
-    print(nextCheckpoint.x + ' ' + nextCheckpoint.y + ' ' + thrust);
+  // Print output for checking object contents
+  codingGame.printErr("All Checkpoints Known: " + race.courseLearned);
+  codingGame.printErr("Course Length: " + race.courseLength);
+  codingGame.printErr("Player Velocity: " + player.velocity);
+  codingGame.printErr("Player Acceleration: " + player.acceleration);
+  codingGame.printErr("Opponent Velocity: " + opponent.velocity);
+  codingGame.printErr("Opponent Acceleration: " + opponent.acceleration);
+
+  codingGame.print(nextCheckpoint.x + " " + nextCheckpoint.y + " " + thrust);
 }

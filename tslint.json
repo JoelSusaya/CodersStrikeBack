@@ -25,7 +25,7 @@
       "variables-before-functions"
     ],
     "no-arg": true,
-    "no-bitwise": true,
+    "no-bitwise": false,
     "no-console": [
       true,
       "debug",
@@ -39,13 +39,13 @@
     "no-duplicate-key": true,
     "no-duplicate-variable": true,
     "no-empty": false,
-    "no-eval": true,
+    "no-eval": false,
     "no-inferrable-types": true,
     "no-shadowed-variable": true,
     "no-string-literal": false,
     "no-switch-case-fall-through": true,
     "no-trailing-whitespace": true,
-    "no-unused-expression": true,
+    "no-unused-expression": false,
     "no-unused-variable": true,
     "no-unreachable": true,
     "no-use-before-declare": true,
@@ -55,12 +55,11 @@
       true,
       "check-open-brace",
       "check-catch",
-      "check-else",
       "check-whitespace"
     ],
     "quotemark": [
       true,
-      "single"
+      "double"
     ],
     "radix": true,
     "semicolon": [

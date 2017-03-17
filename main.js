@@ -28,7 +28,6 @@ function getThrustByAngle(angle) {
     }
     return 100;
 }
-;
 function changeThrustByDistance(thrust, distance) {
     if (distance < 100) {
         return thrust * .2;
@@ -44,7 +43,19 @@ function changeThrustByDistance(thrust, distance) {
     }
     return thrust;
 }
-;
+class CodingGame {
+    print(output) {
+        let expression = "print('" + output + "');";
+        eval(expression);
+    }
+    printErr(output) {
+        let expression = "printErr('" + output + "');";
+        eval(expression);
+    }
+    readline() {
+        return eval("readline();");
+    }
+}
 class Target {
     get x() {
         return this._x;
@@ -65,12 +76,13 @@ class Checkpoint extends Target {
         this._RADIUS = 600;
     }
     outerPointByDegree(degree) {
+        return;
     }
     get distance() {
         return this._distanceFromPlayer;
     }
     set distance(distance) {
-        this._distanceFromplayer = distance;
+        this._distanceFromPlayer = distance;
     }
 }
 class RaceCourse {
@@ -91,7 +103,7 @@ class RaceCourse {
         this._nextCheckpoint = newCheckpoint;
     }
     getCheckpoint(index) {
-        this._course[index];
+        return this._course[index];
     }
     get courseLength() {
         return this._course.length;
@@ -130,7 +142,7 @@ class Pod {
         this._y = position;
     }
     get xVelocity() {
-        if (typeof this._lastX === "undefined") {
+        if (typeof (this._lastX) === "undefined") {
             return undefined;
         }
         this._lastXVelocity = this._xVelocity;
@@ -146,7 +158,7 @@ class Pod {
         return this._yVelocity;
     }
     get velocity() {
-        let addedSquaredVelocity = this.xVelocity ^ 2 + this.yVelocity ^ 2;
+        let addedSquaredVelocity = (this.xVelocity ^ 2) + (this.yVelocity ^ 2);
         return Math.sqrt(Math.abs(addedSquaredVelocity));
     }
     get xAccel() {
@@ -164,7 +176,7 @@ class Pod {
         return this._yAccel;
     }
     get acceleration() {
-        let addedSquaredAccel = this.xAccel ^ 2 + this.yAccel ^ 2;
+        let addedSquaredAccel = (this.xAccel ^ 2) + (this.yAccel ^ 2);
         return Math.sqrt(Math.abs(addedSquaredAccel));
     }
 }
@@ -175,10 +187,10 @@ class PlayerPod extends Pod {
         this._MAXTHRUST = 100;
         this._hasBoost = true;
     }
-    get MINTHRUST() {
+    get minThrust() {
         return this._MINTHRUST;
     }
-    get MAXTHRUST() {
+    get maxThrust() {
         return this._MAXTHRUST;
     }
     get angle() {
@@ -188,38 +200,42 @@ class PlayerPod extends Pod {
         this._angle = newAngle;
     }
     get thrust() {
+        return;
     }
     get targetCheckpoint() {
-        return player._targetCheckpoint;
+        return this._targetCheckpoint;
     }
     set targetCheckpoint(checkpoint) {
-        player._targetCheckpoint = checkpoint;
+        this._targetCheckpoint = checkpoint;
     }
     get target() {
-        return player._target;
+        return this._target;
     }
     set target(target) {
-        player._target = target;
+        this._target = target;
     }
 }
-var player = new PlayerPod();
-var opponent = new Pod();
-var race = new RaceCourse();
+let player = new PlayerPod();
+let opponent = new Pod();
+let race = new RaceCourse();
+let codingGame = new CodingGame();
 while (true) {
-    var inputs = readline().split(' ');
-    player.x = parseInt(inputs[0]);
-    player.y = parseInt(inputs[1]);
-    var nextCheckpoint = new Checkpoint();
-    nextCheckpoint.x = parseInt(inputs[2]);
-    nextCheckpoint.y = parseInt(inputs[3]);
-    nextCheckpoint.distance = parseInt(inputs[4]);
-    player.angle = parseInt(inputs[5]);
-    var inputs = readline().split(' ');
-    opponent.x = parseInt(inputs[0]);
-    opponent.y = parseInt(inputs[1]);
-    if (race.courseLearned === false)
+    let inputs;
+    inputs = codingGame.readline().split(" ");
+    player.x = parseInt(inputs[0], 10);
+    player.y = parseInt(inputs[1], 10);
+    let nextCheckpoint = new Checkpoint();
+    nextCheckpoint.x = parseInt(inputs[2], 10);
+    nextCheckpoint.y = parseInt(inputs[3], 10);
+    nextCheckpoint.distance = parseInt(inputs[4], 10);
+    player.angle = parseInt(inputs[5], 10);
+    inputs = codingGame.readline().split(" ");
+    opponent.x = parseInt(inputs[0], 10);
+    opponent.y = parseInt(inputs[1], 10);
+    if (race.courseLearned === false) {
         race.learnCourse(nextCheckpoint);
-    var thrust;
+    }
+    let thrust;
     if (nextCheckpoint.distance > 4000 && player.angle === 0) {
         thrust = "BOOST";
     }
@@ -227,12 +243,12 @@ while (true) {
         thrust = getThrustByAngle(Math.abs(player.angle));
         thrust = changeThrustByDistance(thrust, nextCheckpoint.distance);
     }
-    printErr("All Checkpoints Known: " + race.allCheckpointsKnown);
-    printErr("Course Length: " + race.courseLength);
-    printErr("Player Velocity: " + player.velocity);
-    printErr("Player Acceleration: " + player.acceleration);
-    printErr("Opponent Velocity: " + opponent.velocity);
-    printErr("Opponent Acceleration: " + opponent.acceleration);
-    print(nextCheckpoint.x + ' ' + nextCheckpoint.y + ' ' + thrust);
+    codingGame.printErr("All Checkpoints Known: " + race.courseLearned);
+    codingGame.printErr("Course Length: " + race.courseLength);
+    codingGame.printErr("Player Velocity: " + player.velocity);
+    codingGame.printErr("Player Acceleration: " + player.acceleration);
+    codingGame.printErr("Opponent Velocity: " + opponent.velocity);
+    codingGame.printErr("Opponent Acceleration: " + opponent.acceleration);
+    codingGame.print(nextCheckpoint.x + " " + nextCheckpoint.y + " " + thrust);
 }
 //# sourceMappingURL=main.js.map
