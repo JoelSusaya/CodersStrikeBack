@@ -1,3 +1,5 @@
+/// <reference path="./Codingame.d.ts" />
+
 function getThrustByAngle(angle: number): number {
     if (angle > 135) {
         return 0;
@@ -44,22 +46,6 @@ function changeThrustByDistance(thrust: number, distance: number): number {
         return thrust * .9;
     }
     return thrust;
-}
-
-class CodingGame {
-  print(output: any): void {
-    let expression: string = "print('" + output + "');";
-    eval(expression);
-  }
-
-  printErr(output: any): void {
-    let expression: string =  "printErr('" + output + "');";
-    eval(expression);
-  }
-
-  readline(): string {
-    return eval("readline();");
-  }
 }
 
 // Target class for aiming the player pod
@@ -193,7 +179,7 @@ class Pod {
 
   // Methods for calculating the change in X and Y
   get xVelocity(): number {
-    if (typeof(this._lastX) === "undefined") {
+    if (typeof this._lastX === "undefined") {
         return undefined;
     }
 
@@ -214,7 +200,7 @@ class Pod {
   }
 
   get velocity(): number {
-    let addedSquaredVelocity = (this.xVelocity ^ 2) + (this.yVelocity ^ 2);
+    let addedSquaredVelocity = (this.xVelocity ** 2) + (this.yVelocity ** 2);
     /*
     if (addedSquaredVelocity < 0) {
         return Math.sqrt(Math.abs(addedSquaredVelocity)) * -1;
@@ -242,7 +228,7 @@ class Pod {
   }
 
   get acceleration(): number  {
-    let addedSquaredAccel = (this.xAccel ^ 2) + (this.yAccel ^ 2);
+    let addedSquaredAccel = (this.xAccel ** 2) + (this.yAccel ** 2);
 
     /*
     if (addedSquaredAccel < 0) {
@@ -311,13 +297,11 @@ let opponent = new Pod();
 
 let race = new RaceCourse();
 
-let codingGame = new CodingGame();
-
 // game loop
 while (true) {
   let inputs: Array<string>;
 
-  inputs = codingGame.readline().split(" ");
+  inputs = readline().split(" ");
 
   // Update player info
   player.x = parseInt(inputs[0], 10);
@@ -331,7 +315,7 @@ while (true) {
   player.angle = parseInt(inputs[5], 10); // angle between your pod orientation and the direction of the next checkpoint
 
   // Update opponent info
-  inputs = codingGame.readline().split(" ");
+  inputs = readline().split(" ");
   opponent.x = parseInt(inputs[0], 10);
   opponent.y = parseInt(inputs[1], 10);
 
@@ -352,12 +336,12 @@ while (true) {
   }
 
   // Print output for checking object contents
-  codingGame.printErr("All Checkpoints Known: " + race.courseLearned);
-  codingGame.printErr("Course Length: " + race.courseLength);
-  codingGame.printErr("Player Velocity: " + player.velocity);
-  codingGame.printErr("Player Acceleration: " + player.acceleration);
-  codingGame.printErr("Opponent Velocity: " + opponent.velocity);
-  codingGame.printErr("Opponent Acceleration: " + opponent.acceleration);
+  printErr("All Checkpoints Known: " + race.courseLearned);
+  printErr("Course Length: " + race.courseLength);
+  printErr("Player Velocity: " + player.velocity);
+  printErr("Player Acceleration: " + player.acceleration);
+  printErr("Opponent Velocity: " + opponent.velocity);
+  printErr("Opponent Acceleration: " + opponent.acceleration);
 
-  codingGame.print(nextCheckpoint.x + " " + nextCheckpoint.y + " " + thrust);
+  print(nextCheckpoint.x + " " + nextCheckpoint.y + " " + thrust);
 }

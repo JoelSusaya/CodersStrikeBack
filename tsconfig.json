@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es2015",
     "module": "commonjs",
+    "compileOnSave": true,
     "moduleResolution": "node",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
